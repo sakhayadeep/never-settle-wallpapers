@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 
+import './wallpaper_manager.dart';
+
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _MyAppState();
-  }
-}
-
-class _MyAppState extends State<MyApp> {
-  List<String> _wallpapers = ["Selfie"];
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(context) {
     return MaterialApp(
@@ -20,33 +12,7 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(
             title: Text("Never Settle"),
           ),
-          body: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(5.0),
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      _wallpapers.add("Selfie 1 again");
-                    });
-                  },
-                  child: Text("Press this"),
-                ),
-              ),
-              Column(
-                children: _wallpapers
-                    .map((element) => Card(
-                          child: Column(
-                            children: <Widget>[
-                              Image.asset("assets/selfie.jpg"),
-                              Text(element)
-                            ],
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ],
-          )),
+          body: WallpaperManager()),
     );
   }
 }
