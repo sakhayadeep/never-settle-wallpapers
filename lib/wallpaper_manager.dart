@@ -24,7 +24,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         Container(
           margin: EdgeInsets.all(5.0),
