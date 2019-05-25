@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import './wallpaper_manager.dart';
+import './drawer_manager.dart';
+
+const String _appTitle = "Never Settle";
 
 void main() => runApp(MyApp());
 
@@ -12,47 +15,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String _appTitle = "Never Settle";
-  bool darkThemeEnabled = false;
+  bool _darkThemeEnabled = false;
+
+  void _changeThemeStatus() {
+    setState(() {
+      _darkThemeEnabled = _darkThemeEnabled ? false : true;
+    });
+  }
 
   @override
   Widget build(context) {
     return MaterialApp(
       theme: ThemeData(
-        brightness: darkThemeEnabled ? Brightness.dark : Brightness.light,
-        primarySwatch: Colors.deepOrange,
+        brightness: _darkThemeEnabled ? Brightness.dark : Brightness.light,
+        primarySwatch: Colors.teal,
       ),
       home: Scaffold(
           appBar: AppBar(
             title: Text(_appTitle),
           ),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.all(0),
-              children: <Widget>[
-                DrawerHeader(
-                  decoration: BoxDecoration(color: Colors.orange),
-                  child: ListTile(
-                    title: Text("Sakhayadeep Nath"),
-                    subtitle: Text("sakhayadeepnath@gmaill.com"),
-                    trailing: Icon(Icons.account_circle),
-                    onTap: () {},
-                  ),
-                ),
-                ListTile(
-                  title: Text("Dark Theme"),
-                  trailing: Switch(
-                    value: darkThemeEnabled,
-                    onChanged: (changedTheme) {
-                      darkThemeEnabled = changedTheme;
-                      setState(() {});
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
-          body: WallpaperManager("Coolfie")),
+          drawer: DrawerManager(_changeThemeStatus, _darkThemeEnabled),
+          body: WallpaperManager()),
     );
   }
 }
