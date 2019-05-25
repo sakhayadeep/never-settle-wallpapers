@@ -11,10 +11,7 @@ class Wallpapers extends StatelessWidget {
       children: wallpapers
           .map((element) => Card(
                 child: Column(
-                  children: <Widget>[
-                    Image.asset("assets/selfie.jpg"),
-                    Text(element)
-                  ],
+                  children: <Widget>[new Image.network(element)],
                 ),
               ))
           .toList(),

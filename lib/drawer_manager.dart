@@ -30,13 +30,12 @@ class _DrawerManagerState extends State<DrawerManager> {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(color: Colors.orange),
-            child: ListTile(
-              title: Text("Sakhayadeep Nath"),
-              subtitle: Text("sakhayadeepnath@gmaill.com"),
-              trailing: Icon(Icons.account_circle),
-              onTap: () {
-                //maybe change account
-              },
+            child: Center(
+              child: ListTile(
+                title: Image.network(
+                    "https://www.pexels.com/assets/pexels-logo-7e4af4630e66b6b786567041874586aeb1b5217589035c70a0def15aacd0f11a.png"),
+                subtitle: Text("www.pexels.com"),
+              ),
             ),
           ),
           ListTile(

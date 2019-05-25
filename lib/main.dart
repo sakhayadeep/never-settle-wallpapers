@@ -31,16 +31,11 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.teal,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: Text(_appTitle),
-        ),
-        drawer: DrawerManager(_changeThemeStatus, _darkThemeEnabled),
-        body: WallpaperManager("Coolfie"),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
-        ),
-      ),
+          appBar: AppBar(
+            title: Text(_appTitle),
+          ),
+          drawer: DrawerManager(_changeThemeStatus, _darkThemeEnabled),
+          body: WallpaperManager()),
     );
   }
 }
