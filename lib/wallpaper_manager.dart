@@ -21,14 +21,16 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     int wallpaperPage = page.nextInt(999) + 1;
     var url =
         "https://api.pexels.com/v1/curated?per_page=1&page=$wallpaperPage";
-    String key = "";
+    String key = "563492ad6f917000010000012cdec998428e409b8ddc1e38d8cdcf29";
 
     http.Response response =
         await http.get(Uri.encodeFull(url), headers: {"Authorization": key});
 
     var data = json.decode(response.body);
     var photo = data["photos"] as List;
-    _wallpapers.insert(0, photo[0]["src"]["medium"]);
+    setState(() {
+      _wallpapers.insert(0, photo[0]["src"]["medium"]);
+    });
   }
 
   @override
@@ -47,9 +49,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
             color: Colors.teal,
             textColor: Colors.white,
             onPressed: () {
-              setState(() {
-                getWallpaper();
-              });
+              getWallpaper();
             },
             child: Text("add more(${_wallpapers.length})"),
           ),

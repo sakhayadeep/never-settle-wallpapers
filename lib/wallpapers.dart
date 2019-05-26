@@ -10,9 +10,13 @@ class Wallpapers extends StatelessWidget {
     return Column(
       children: wallpapers
           .map((element) => Card(
-                child: Column(
-                  children: <Widget>[new Image.network(element)],
-                ),
+                child: Container(
+                    decoration: BoxDecoration(color: Colors.black26),
+                    child: new Image.network(
+                      element,
+                      width: 500,
+                      height: 270,
+                    )),
               ))
           .toList(),
     );
