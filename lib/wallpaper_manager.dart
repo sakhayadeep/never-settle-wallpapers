@@ -15,11 +15,10 @@ class WallpaperManager extends StatefulWidget {
 
 class _WallpaperManagerState extends State<WallpaperManager> {
   List<String> _wallpapers = [];
-  int imgRequestPerPage;
+  final int imgRequestPerPage = 12;
 
   @override
   void initState() {
-    imgRequestPerPage = 9;
     _getWallpaper();
     super.initState();
   }
@@ -29,7 +28,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     int wallpaperPage = page.nextInt(999) + 1;
     var url =
         "https://api.pexels.com/v1/curated?per_page=$imgRequestPerPage&page=$wallpaperPage";
-    String key = "563492ad6f91700001000001f63a7e1ea71a4851831fdc294f3b8e58";
+    String key = "563492ad6f917000010000012cdec998428e409b8ddc1e38d8cdcf29";
 
     final http.Response response =
         await http.get(Uri.encodeFull(url), headers: {"Authorization": key});
@@ -39,7 +38,6 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     var photo = data["photos"] as List;
 
     if (response.statusCode == 200) {
-      imgRequestPerPage = 3;
       setState(() {
         for (int i = 0; i < photo.length; i++) {
           _wallpapers.add(photo[i]["src"]["small"]);
