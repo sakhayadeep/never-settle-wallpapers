@@ -8,17 +8,44 @@ class Wallpapers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: wallpapers
-          .map((element) => Card(
-                child: Container(
-                    decoration: BoxDecoration(color: Colors.black26),
-                    child: new Image.network(
-                      element,
-                      width: 500,
-                      height: 270,
-                    )),
-              ))
-          .toList(),
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: 10, // Set as you want or you can remove it also.
+                maxHeight: double.infinity,
+              ),
+              child: OrientationBuilder(
+                builder: (context, orientation) {
+                  print(orientation == Orientation.portrait);
+                  return Container(
+                    child: GridView.count(
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 3 : 4,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
+                      childAspectRatio: .5,
+                      children: wallpapers
+                          .map((element) => Card(
+                                child: Container(
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    child: new Image.network(
+                                      element,
+                                      fit: BoxFit.cover,
+                                    )),
+                              ))
+                          .toList(),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ],
     );
   }
 }
