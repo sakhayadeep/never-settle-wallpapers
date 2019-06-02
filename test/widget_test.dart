@@ -7,13 +7,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:gamify_fcs/main.dart';
 
-void main() {
+Future main() async{
+  await DotEnv().load('.env');
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(MyApp(DotEnv().env['API_KEY']));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

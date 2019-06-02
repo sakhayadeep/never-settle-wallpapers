@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   http: ^0.12.0+2
   wallpaper: ^0.0.4
+  flutter_dotenv: ^2.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -46,7 +47,7 @@ flutter:
   assets:
     - assets/selfie.jpg
     - assets/loading.jpg
-  #  - images/a_dot_ham.jpeg
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

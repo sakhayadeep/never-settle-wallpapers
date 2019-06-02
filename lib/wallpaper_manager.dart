@@ -7,6 +7,10 @@ import 'package:http/http.dart' as http;
 import './wallpapers.dart';
 
 class WallpaperManager extends StatefulWidget {
+  final String apiKey;
+  
+  WallpaperManager(this.apiKey);
+
   @override
   State<StatefulWidget> createState() {
     return _WallpaperManagerState();
@@ -14,12 +18,14 @@ class WallpaperManager extends StatefulWidget {
 }
 
 class _WallpaperManagerState extends State<WallpaperManager> {
+  String apiKey;
   List<String> _wallpapers = [];
   final int imgRequestPerPage = 12;
   String query;
 
   @override
   void initState() {
+    apiKey = widget.apiKey;
     super.initState();
     _getWallpaper();
   }
@@ -35,7 +41,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
       url =
           "https://api.pexels.com/v1/search?query=$query&per_page=$imgRequestPerPage&page=$wallpaperPage";
     }
-    String key = "563492ad6f91700001000001f63a7e1ea71a4851831fdc294f3b8e58";
+    String key = apiKey;
 
     final http.Response response =
         await http.get(Uri.encodeFull(url), headers: {"Authorization": key});
