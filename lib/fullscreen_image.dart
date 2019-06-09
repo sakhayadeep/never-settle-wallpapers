@@ -51,7 +51,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                         if (!mounted) return;
                         setState(() {
                           result = res.toString();
-						              _showSnackBar(result);
+                          _showSnackBar(result);
                         });
                       },
                       child: Text("Set as wallpaper"),
