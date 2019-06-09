@@ -12,6 +12,7 @@ class FullScreenImagePage extends StatefulWidget {
 }
 
 class _FullScreenImagePageState extends State<FullScreenImagePage> {
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
   String result = "Waiting to set wallpaper";
   String imgPath;
   @override
@@ -28,6 +29,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: scaffoldKey,
       body: new SizedBox.expand(
         child: new Container(
           decoration: new BoxDecoration(gradient: backGroundGradient),
@@ -49,6 +51,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                         if (!mounted) return;
                         setState(() {
                           result = res.toString();
+						  _showSnackBar(result);
                         });
                       },
                       child: Text("Set as wallpaper"),
@@ -81,5 +84,10 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
         ),
       ),
     );
+  }
+   _showSnackBar(String text,
+      {Duration duration = const Duration(seconds: 1, milliseconds: 500)}) {
+    return scaffoldKey.currentState.showSnackBar(
+        new SnackBar(content: new Text(text), duration: duration));
   }
 }
