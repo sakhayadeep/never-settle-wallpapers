@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper/wallpaper.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class FullScreenImagePage extends StatefulWidget {
   final String imgPath;
