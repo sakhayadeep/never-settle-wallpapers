@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper/wallpaper.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class FullScreenImagePage extends StatefulWidget {
   final String imgPath;
@@ -43,7 +42,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                     new Image.network(
                       imgPath,
                       height: MediaQuery.of(context).size.height - 50,
-                      width: MediaQuery.of(context).size.width - 50,
+                      width: MediaQuery.of(context).size.width - 30,
                     ),
                     RaisedButton(
                       onPressed: () async {
