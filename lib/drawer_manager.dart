@@ -30,11 +30,12 @@ class _DrawerManagerState extends State<DrawerManager> {
         padding: EdgeInsets.all(0),
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.orange),
+            decoration: BoxDecoration(color: Colors.teal),
             child: Center(
               child: ListTile(
-                title: Image.asset("assets/NeverSettle.png"),
-                subtitle: InkWell(
+                contentPadding: EdgeInsets.all(0),
+                leading: Image.asset("assets/NeverSettle.png"),
+                trailing: InkWell(
                           child: Text("Powered By Wallpaper Abyss"),
                           onTap: () async {
                             if (await canLaunch("https://wall.alphacoders.com")) {

@@ -33,11 +33,9 @@ class _WallpaperManagerState extends State<WallpaperManager> {
 
     if(thumbUrls.length !=0 && thumbUrls.length % 30 == 0){
       page++;
-      print("updating page to : $page");
     }
     if(page>300){
       page = 1;
-      print("resetting page");
     }
 
   }
