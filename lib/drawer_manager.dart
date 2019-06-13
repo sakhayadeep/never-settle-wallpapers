@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerManager extends StatefulWidget {
   final Function _changeThemeStatus;
@@ -29,12 +30,19 @@ class _DrawerManagerState extends State<DrawerManager> {
         padding: EdgeInsets.all(0),
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.orange),
+            decoration: BoxDecoration(color: Colors.teal),
             child: Center(
               child: ListTile(
-                title: Image.network(
-                    "https://www.pexels.com/assets/pexels-logo-7e4af4630e66b6b786567041874586aeb1b5217589035c70a0def15aacd0f11a.png"),
-                subtitle: Text("www.pexels.com"),
+                contentPadding: EdgeInsets.all(0),
+                leading: Image.asset("assets/NeverSettle.png"),
+                trailing: InkWell(
+                          child: Text("Powered By Wallpaper Abyss"),
+                          onTap: () async {
+                            if (await canLaunch("https://wall.alphacoders.com")) {
+                              await launch("https://wall.alphacoders.com");
+                            }
+                          },
+                        ),
               ),
             ),
           ),

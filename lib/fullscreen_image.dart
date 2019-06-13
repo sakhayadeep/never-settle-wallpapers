@@ -11,10 +11,12 @@ class FullScreenImagePage extends StatefulWidget {
   }
 }
 
+
 class _FullScreenImagePageState extends State<FullScreenImagePage> {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   String result = "Waiting to set wallpaper";
   String imgPath;
+
   @override
   void initState() {
     imgPath = widget.imgPath;
@@ -38,13 +40,15 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
               new Align(
                 child: new Hero(
                   tag: imgPath,
-                  child: Column(children: [
+                  child: ListView(children: [
                     new Image.network(
                       imgPath,
-                      height: MediaQuery.of(context).size.height - 50,
-                      width: MediaQuery.of(context).size.width - 50,
+                      height: MediaQuery.of(context).size.height - 70,
+                      width: MediaQuery.of(context).size.width - 30,
                     ),
-                    RaisedButton(
+                    Row(
+                      children: <Widget>[
+                        Expanded(child:RaisedButton(
                       onPressed: () async {
                         String res;
                         res = await Wallpaper.homeScreen(imgPath);
@@ -55,7 +59,16 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                         });
                       },
                       child: Text("Set as wallpaper"),
-                    ),
+                    )),
+                    Expanded(child:RaisedButton(
+                      onPressed: (){
+                        // TODO: implement this to download
+                      },
+                      child: Text("Download wallpaper"),
+                    ))    
+                    
+                      ],
+                    )
                   ]),
                 ),
               ),

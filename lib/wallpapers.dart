@@ -1,14 +1,40 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 import './fullscreen_image.dart';
 
-class Wallpapers extends StatelessWidget {
-  final List<String> wallpapers;
+class Wallpapers extends StatefulWidget {
+  final HashMap<String, String> wallpapers;
+  final List thumbUrls;
+  final Function updateList;
 
-  Wallpapers(this.wallpapers);
+  Wallpapers(this.wallpapers, this.thumbUrls, this.updateList);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _WallpapersState();
+  }
+}
+
+class _WallpapersState extends State<Wallpapers>{
+  List thumbUrls = new List<String>();
+  HashMap<String, String> wallpapers;
+  Function updateList;
+
+  @override
+  void initState() {
+    wallpapers = widget.wallpapers;
+    thumbUrls = widget.thumbUrls;
+    updateList = widget.updateList;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    updateList();
+    print("list length = ${thumbUrls.length}");
     return Column(
       children: <Widget>[
         Column(
@@ -28,21 +54,18 @@ class Wallpapers extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
                   childAspectRatio: .6,
-                  children: wallpapers
-                      .map((element) => Card(
+                  children: thumbUrls
+                      .map((urlThumb) => Card(
                             child: Container(
                                 decoration: BoxDecoration(color: Colors.white),
                                 child: GestureDetector(
                                   onTap: () => Navigator.push(context,
                                           new MaterialPageRoute(
                                               builder: (context) {
-                                        RegExp exp = new RegExp(r".*jpeg");
-                                        String match =
-                                            exp.stringMatch(element).toString();
-                                        return new FullScreenImagePage(match);
+                                        return new FullScreenImagePage(wallpapers[urlThumb]);//Map wallpaper = {url_thumb : url_image}
                                       })),
                                   child: new Image.network(
-                                    element,
+                                    urlThumb,
                                     fit: BoxFit.cover,
                                   ),
                                 )),

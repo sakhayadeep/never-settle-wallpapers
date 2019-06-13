@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,45 +19,61 @@ class WallpaperManager extends StatefulWidget {
 
 class _WallpaperManagerState extends State<WallpaperManager> {
   String apiKey;
-  List<String> _wallpapers = [];
-  final int imgRequestPerPage = 12;
-  String query;
+  HashMap _wallpapers = new HashMap<String, String>();
+  List thumbUrls = new List<String>();
+  
+  static int page = 1;
+  void _updateList(){
+    print("Updating list");
+    _wallpapers.forEach((urlThumb,urlImage){
+      if(thumbUrls.contains(urlThumb) == false){
+        thumbUrls.add(urlThumb);
+      }
+    });
 
+    if(thumbUrls.length !=0 && thumbUrls.length % 30 == 0){
+      page++;
+    }
+    if(page>300){
+      page = 1;
+    }
+
+  }
+  
   @override
   void initState() {
     apiKey = widget.apiKey;
-    super.initState();
     _getWallpaper();
+    super.initState();
   }
 
-  _getWallpaper() async {
-    var page = new Random();
-    int wallpaperPage = page.nextInt(999) + 1;
-    String url;
-    if (query == null) {
-      url =
-          "https://api.pexels.com/v1/curated?per_page=$imgRequestPerPage&page=$wallpaperPage";
-    } else {
-      url =
-          "https://api.pexels.com/v1/search?query=$query&per_page=$imgRequestPerPage&page=$wallpaperPage";
-    }
+  _getWallpaper() async{
     String key = apiKey;
+    String method = "featured";
+    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$key&method=$method&page=$page";
+    try{
+      final http.Response response = await http.get(Uri.encodeFull(url));
 
-    final http.Response response =
-        await http.get(Uri.encodeFull(url), headers: {"Authorization": key});
+      var data = json.decode(response.body);
 
-    var data = json.decode(response.body);
-
-    var photo = data["photos"] as List;
-
-    if (response.statusCode == 200) {
-      for (int i = 0; i < photo.length; i++) {
-        _wallpapers.add(photo[i]["src"]["small"]);
-      }
+      if (response.statusCode == 200) {
+        if(data["success"]){
+          var wallpaperList = data["wallpapers"] as List;
+          
+          for(int i=0; i<wallpaperList.length; i++){
+            _wallpapers[wallpaperList[i]["url_thumb"]] = wallpaperList[i]["url_image"];
+          }
+        }
+      
     } else {
       Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text("Server busy, try again later."),
+        content: new Text("error : ${data["success"]}"),
       ));
+    }
+
+    }
+    catch(e){
+      print("error is $e");
     }
   }
 
@@ -72,7 +88,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
           }
         },
         child: ListView(
-          children: <Widget>[Wallpapers(_wallpapers)],
+          children: <Widget>[Wallpapers(_wallpapers, thumbUrls, _updateList)],
         ));
   }
 }
