@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper/wallpaper.dart';
+import 'dart:io';
+
 
 class FullScreenImagePage extends StatefulWidget {
   final String imgPath;
@@ -63,6 +65,20 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                     Expanded(child:RaisedButton(
                       onPressed: (){
                         // TODO: implement this to download
+                        HttpClient client = new HttpClient();
+                        var _downloadData = List<int>();
+                        var fileSave = new File('./logo.png');
+                        client.getUrl(Uri.parse(imgPath))
+                        .then((HttpClientRequest request) {
+                          return request.close();
+                          })
+                          .then((HttpClientResponse response) {
+                            response.listen((d) => _downloadData.addAll(d),
+                            onDone: () {
+                              fileSave.writeAsBytes(_downloadData);
+                              }
+                            );
+                          });
                       },
                       child: Text("Download wallpaper"),
                     ))    
@@ -103,4 +119,21 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     return scaffoldKey.currentState.showSnackBar(
         new SnackBar(content: new Text(text), duration: duration));
   }
+ 
 }
+/*
+ HttpClient client = new HttpClient();
+var _downloadData = List<int>();
+var fileSave = new File('./logo.png');
+client.getUrl(Uri.parse(imgPath))
+  .then((HttpClientRequest request) {
+    return request.close();
+  })
+  .then((HttpClientResponse response) {
+    response.listen((d) => _downloadData.addAll(d),
+      onDone: () {
+        fileSave.writeAsBytes(_downloadData);
+      }
+    );
+  });
+  */
