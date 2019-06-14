@@ -62,7 +62,8 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                       ),
                     Row(
                       children: <Widget>[
-                        Expanded(child:RaisedButton(
+                        Expanded(child:FlatButton(
+                          color: Colors.teal,
                       onPressed: () async {
                         _showSnackBar(result);
                         String res = await Wallpaper.homeScreen(imgPath);
@@ -72,13 +73,14 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                           _showSnackBar(result);
                         });
                       },
-                      child: Text("Set as wallpaper"),
+                      child: Text("Set as wallpaper", style: TextStyle(color: Colors.white),),
                     )),
-                    Expanded(child:RaisedButton(
+                    Expanded(child:FlatButton(
+                      color: Colors.teal,
                       onPressed: (){
                         // TODO: implement this to download
                       },
-                      child: Text("Download wallpaper"),
+                      child: Text("Download wallpaper", style: TextStyle(color: Colors.white)),
                     ))    
                     
                       ],
