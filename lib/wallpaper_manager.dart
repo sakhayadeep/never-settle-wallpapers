@@ -42,9 +42,9 @@ class _WallpaperManagerState extends State<WallpaperManager> {
   
   @override
   void initState() {
+    super.initState();
     apiKey = widget.apiKey;
     _getWallpaper();
-    super.initState();
   }
 
   _getWallpaper() async{

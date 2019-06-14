@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper/wallpaper.dart';
+import 'package:transparent_image/transparent_image.dart';
+
+const String _appTitle = "Never Settle";
 
 class FullScreenImagePage extends StatefulWidget {
   final String imgPath;
@@ -32,6 +35,9 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       key: scaffoldKey,
+      appBar: AppBar(
+            title: Text(_appTitle),
+          ),
       body: new SizedBox.expand(
         child: new Container(
           decoration: new BoxDecoration(gradient: backGroundGradient),
@@ -40,21 +46,29 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
               new Align(
                 child: new Hero(
                   tag: imgPath,
-                  child: ListView(children: [
-                    new Image.network(
-                      imgPath,
-                      height: MediaQuery.of(context).size.height - 70,
-                      width: MediaQuery.of(context).size.width - 30,
-                    ),
+                  child: Column(children: [
+                    Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Center( child: CircularProgressIndicator()),
+                          Center(
+                            child: FadeInImage.memoryNetwork(
+                              height: MediaQuery.of(context).size.height - 130,
+                              placeholder: kTransparentImage,
+                              image: imgPath,
+                            ),
+                          ),
+                        ],
+                      ),
                     Row(
                       children: <Widget>[
                         Expanded(child:RaisedButton(
                       onPressed: () async {
-                        String res;
-                        res = await Wallpaper.homeScreen(imgPath);
+                        _showSnackBar(result);
+                        String res = await Wallpaper.homeScreen(imgPath);
                         if (!mounted) return;
                         setState(() {
-                          result = res.toString();
+                          result = res;
                           _showSnackBar(result);
                         });
                       },
@@ -70,26 +84,6 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                       ],
                     )
                   ]),
-                ),
-              ),
-              new Align(
-                alignment: Alignment.topCenter,
-                child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    new AppBar(
-                      elevation: 0.0,
-                      backgroundColor: Colors.transparent,
-                      leading: new IconButton(
-                        icon: new Icon(
-                          Icons.close,
-                          color: Colors.black,
-                        ),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    )
-                  ],
                 ),
               ),
             ],
