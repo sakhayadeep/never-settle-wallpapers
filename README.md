@@ -8,5 +8,3 @@ __ADD YOUR PEXELS API KEY IN THE `.env` FILE__
 
 1. Homescreen loads after change in state
 2. Image needs to be resized
-
-[![Screenshot-2019-06-14-15-31-29-188-com-fcs-gamify-fcs.png](https://i.postimg.cc/R03fwfZR/Screenshot-2019-06-14-15-31-29-188-com-fcs-gamify-fcs.png)](https://postimg.cc/DWT8TSsJ)

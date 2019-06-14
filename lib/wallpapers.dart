@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import './fullscreen_image.dart';
 
 class Wallpapers extends StatefulWidget {
-  final HashMap<String, String> wallpapers;
+  final HashMap<String, List<String>> wallpapers;
   final List thumbUrls;
-  final Function updateList;
 
-  Wallpapers(this.wallpapers, this.thumbUrls, this.updateList);
+  Wallpapers(this.wallpapers, this.thumbUrls);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,22 +18,17 @@ class Wallpapers extends StatefulWidget {
 
 class _WallpapersState extends State<Wallpapers>{
   List thumbUrls = new List<String>();
-  HashMap<String, String> wallpapers;
-  Function updateList;
+  HashMap<String, List<String>> wallpapers;
 
   @override
   void initState() {
     wallpapers = widget.wallpapers;
     thumbUrls = widget.thumbUrls;
-    updateList = widget.updateList;
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    updateList();
-    print("list length = ${thumbUrls.length}");
     return Column(
       children: <Widget>[
         Column(
@@ -62,7 +56,7 @@ class _WallpapersState extends State<Wallpapers>{
                                   onTap: () => Navigator.push(context,
                                           new MaterialPageRoute(
                                               builder: (context) {
-                                        return new FullScreenImagePage(wallpapers[urlThumb]);//Map wallpaper = {url_thumb : url_image}
+                                        return new FullScreenImagePage(wallpapers[urlThumb]);//Map wallpaper = {url_thumb : [id, url_image]}
                                       })),
                                   child: new Image.network(
                                     urlThumb,

@@ -3,14 +3,11 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import './wallpapers.dart';
 
 class WallpaperManager extends StatefulWidget {
-  final String apiKey;
-  
-  WallpaperManager(this.apiKey);
-
   @override
   State<StatefulWidget> createState() {
     return _WallpaperManagerState();
@@ -19,38 +16,26 @@ class WallpaperManager extends StatefulWidget {
 
 class _WallpaperManagerState extends State<WallpaperManager> {
   String apiKey;
-  HashMap _wallpapers = new HashMap<String, String>();
-  List thumbUrls = new List<String>();
-  
+  String method = "featured";
   static int page = 1;
-  void _updateList(){
-    print("Updating list");
-    _wallpapers.forEach((urlThumb,urlImage){
-      if(thumbUrls.contains(urlThumb) == false){
-        thumbUrls.add(urlThumb);
-      }
-    });
 
-    if(thumbUrls.length !=0 && thumbUrls.length % 30 == 0){
-      page++;
-    }
-    if(page>300){
-      page = 1;
-    }
+  HashMap _wallpapers = new HashMap<String, List<String>>();
+  List thumbUrls = new List();
 
+  Future getApiKey() async{
+    await DotEnv().load('.env');
+    apiKey = DotEnv().env['API_KEY'];
   }
   
   @override
   void initState() {
-    super.initState();
-    apiKey = widget.apiKey;
+    getApiKey();
     _getWallpaper();
+    super.initState();
   }
 
   _getWallpaper() async{
-    String key = apiKey;
-    String method = "featured";
-    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$key&method=$method&page=$page";
+    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=$method&page=$page";
     try{
       final http.Response response = await http.get(Uri.encodeFull(url));
 
@@ -59,12 +44,26 @@ class _WallpaperManagerState extends State<WallpaperManager> {
       if (response.statusCode == 200) {
         if(data["success"]){
           var wallpaperList = data["wallpapers"] as List;
-          
+        
+          if(page<1000){
+            page++;
+          }
+          else{
+            page = 1;
+          }
+
           for(int i=0; i<wallpaperList.length; i++){
-            _wallpapers[wallpaperList[i]["url_thumb"]] = wallpaperList[i]["url_image"];
+            _wallpapers[wallpaperList[i]["url_thumb"].toString()] = [wallpaperList[i]["id"].toString(), wallpaperList[i]["url_image"].toString()];
+
+            setState(() {
+              _wallpapers.forEach((thumbUrl,imageIdUrls){
+                if(thumbUrls.contains(thumbUrl) == false){
+                  thumbUrls.add(thumbUrl);
+                }
+              });
+            });
           }
         }
-      
     } else {
       Scaffold.of(context).showSnackBar(new SnackBar(
         content: new Text("error : ${data["success"]}"),
@@ -82,13 +81,11 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-            setState(() {
               _getWallpaper();
-            });
           }
         },
         child: ListView(
-          children: <Widget>[Wallpapers(_wallpapers, thumbUrls, _updateList)],
+          children: <Widget>[Wallpapers(_wallpapers, thumbUrls)],
         ));
   }
 }

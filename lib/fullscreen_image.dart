@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper/wallpaper.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 
 const String _appTitle = "Never Settle";
 
 class FullScreenImagePage extends StatefulWidget {
-  final String imgPath;
-  FullScreenImagePage(this.imgPath);
+  final List<String> wallpapers;
+  FullScreenImagePage(this.wallpapers);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,13 +21,25 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   String result = "Waiting to set wallpaper";
   String imgPath;
+  String id;
+  bool downloading=false;
 
   @override
   void initState() {
-    imgPath = widget.imgPath;
+    id = widget.wallpapers[0];
+    imgPath = widget.wallpapers[1];
     super.initState();
   }
 
+Future<void> download() async{
+  Dio dio = Dio();
+  try{
+    var dir = await getApplicationDocumentsDirectory();
+    await dio.download(imgPath, "${dir.path}/never_settle_$id.jpg");
+  }catch(e){
+    print(e);
+  }
+}
   final LinearGradient backGroundGradient = new LinearGradient(
       colors: [new Color(0x30000000), new Color(0x80000000)],
       begin: Alignment.topLeft,
@@ -77,9 +91,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                     )),
                     Expanded(child:FlatButton(
                       color: Colors.teal,
-                      onPressed: (){
-                        // TODO: implement this to download
-                      },
+                      onPressed: () => download,
                       child: Text("Download wallpaper", style: TextStyle(color: Colors.white)),
                     ))    
                     
@@ -95,7 +107,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     );
   }
    _showSnackBar(String text,
-      {Duration duration = const Duration(seconds: 1, milliseconds: 500)}) {
+      {Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
     return scaffoldKey.currentState.showSnackBar(
         new SnackBar(content: new Text(text), duration: duration));
   }
