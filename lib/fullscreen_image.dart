@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper/wallpaper.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
+import 'package:http/http.dart' as http;
 
 const String _appTitle = "Never Settle";
 
@@ -19,7 +19,6 @@ class FullScreenImagePage extends StatefulWidget {
 
 class _FullScreenImagePageState extends State<FullScreenImagePage> {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  String result = "Waiting to set wallpaper";
   String imgPath;
   String id;
   bool downloading=false;
@@ -31,15 +30,27 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     super.initState();
   }
 
-Future<void> download() async{
-  Dio dio = Dio();
+ void _onDownloadPressed() async{
   try{
-    var dir = await getApplicationDocumentsDirectory();
-    await dio.download(imgPath, "${dir.path}/never_settle_$id.jpg");
+    _showSnackBar("Downloading, please wait...");
+    var response = await http.get(imgPath);
+    var filePath = await ImagePickerSaver.saveFile(fileData: response.bodyBytes);
+    _showSnackBar("Done! Saved at $filePath");
   }catch(e){
     print(e);
   }
 }
+
+void _onHomePressed() async{
+  try{
+    _showSnackBar("Setting Home Screen, please wait...");
+    await Wallpaper.homeScreen(imgPath);
+    _showSnackBar("Home Screen wallpaper set!");
+  }catch(e){
+    print(e);
+  }
+}
+
   final LinearGradient backGroundGradient = new LinearGradient(
       colors: [new Color(0x30000000), new Color(0x80000000)],
       begin: Alignment.topLeft,
@@ -78,23 +89,18 @@ Future<void> download() async{
                       children: <Widget>[
                         Expanded(child:FlatButton(
                           color: Colors.teal,
-                      onPressed: () async {
-                        _showSnackBar(result);
-                        String res = await Wallpaper.homeScreen(imgPath);
-                        if (!mounted) return;
-                        setState(() {
-                          result = res;
-                          _showSnackBar(result);
-                        });
-                      },
-                      child: Text("Set as wallpaper", style: TextStyle(color: Colors.white),),
-                    )),
-                    Expanded(child:FlatButton(
-                      color: Colors.teal,
-                      onPressed: () => download,
-                      child: Text("Download wallpaper", style: TextStyle(color: Colors.white)),
-                    ))    
-                    
+                          onPressed: (){
+                            _onHomePressed();
+                          },
+                          child: Text("Set as Wallpaper", style: TextStyle(color: Colors.white),),
+                        )),
+                        Expanded(child:FlatButton(
+                          color: Colors.teal,
+                          onPressed: (){
+                            _onDownloadPressed();
+                          },
+                          child: Text("Download", style: TextStyle(color: Colors.white)),
+                        ))    
                       ],
                     )
                   ]),
@@ -107,7 +113,7 @@ Future<void> download() async{
     );
   }
    _showSnackBar(String text,
-      {Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+      {Duration duration = const Duration(seconds: 3)}) {
     return scaffoldKey.currentState.showSnackBar(
         new SnackBar(content: new Text(text), duration: duration));
   }
