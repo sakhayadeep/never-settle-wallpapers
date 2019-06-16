@@ -34,7 +34,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     super.initState();
   }
 
-  _getWallpaper() async{
+  void _getWallpaper() async{
     String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=$method&page=$page";
     try{
       final http.Response response = await http.get(Uri.encodeFull(url));
