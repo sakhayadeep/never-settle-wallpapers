@@ -11,7 +11,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Never Settle Wallpapers"
+        android:label="Never Settle"
         android:icon="@mipmap/never_settle_icon">
         <activity
             android:name=".MainActivity"

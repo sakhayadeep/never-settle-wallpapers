@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gamify_fcs/main.dart';
+import 'package:never_settle/main.dart';
 
 main(){
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
