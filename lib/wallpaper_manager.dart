@@ -24,14 +24,16 @@ class _WallpaperManagerState extends State<WallpaperManager> {
 
   Future getApiKey() async{
     await DotEnv().load('.env');
-    apiKey = DotEnv().env['API_KEY'];
+    setState(() {
+      apiKey = DotEnv().env['API_KEY'];
+    });
+    _getWallpaper();
   }
   
   @override
   void initState() {
-    getApiKey();
-    _getWallpaper();
     super.initState();
+    getApiKey();
   }
 
   void _getWallpaper() async{
