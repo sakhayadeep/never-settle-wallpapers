@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './wallpaper_manager.dart';
 import './drawer_manager.dart';
@@ -19,8 +20,28 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool _darkThemeEnabled = false;
 
+  Future<void> _getSavedThemeStatus() async{
+    final prefs = await SharedPreferences.getInstance();
+    bool darkThemeEnabled = prefs.getBool('darkThemeEnabled');
+    if(darkThemeEnabled == null){
+      setState(() {
+       _darkThemeEnabled = false; 
+      });
+    }else{
+      setState(() {
+        _darkThemeEnabled = darkThemeEnabled; 
+      });
+    }
+  }
+
+  Future<void> _setSavedThemeStatus() async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('darkThemeEnabled', _darkThemeEnabled);
+  }
+
   @override
   void initState() {
+    _getSavedThemeStatus();
     super.initState();
   }
 
@@ -28,6 +49,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _darkThemeEnabled = _darkThemeEnabled ? false : true;
     });
+    _setSavedThemeStatus();
   }
 
   @override

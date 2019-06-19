@@ -16,7 +16,6 @@ class WallpaperManager extends StatefulWidget {
 
 class _WallpaperManagerState extends State<WallpaperManager> {
   String apiKey;
-  static int page = 1;
 
   HashMap _wallpapers = new HashMap<String, List<String>>();
   List thumbUrls = new List();
@@ -36,7 +35,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
   }
 
   void _getWallpaper() async{
-    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=featured&page=$page";
+    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=random";
     try{
       final http.Response response = await http.get(Uri.encodeFull(url));
 
@@ -45,13 +44,6 @@ class _WallpaperManagerState extends State<WallpaperManager> {
       if (response.statusCode == 200) {
         if(data["success"]){
           var wallpaperList = data["wallpapers"] as List;
-        
-          if(page<1000){
-            page++;
-          }
-          else{
-            page = 1;
-          }
 
           for(int i=0; i<wallpaperList.length; i++){
             _wallpapers[wallpaperList[i]["url_thumb"].toString()] = [wallpaperList[i]["id"].toString(), wallpaperList[i]["url_image"].toString()];
