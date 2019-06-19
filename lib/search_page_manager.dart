@@ -7,16 +7,43 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import './wallpapers.dart';
 
-class WallpaperManager extends StatefulWidget {
+const String _appTitle = "Never Settle";
+
+class SearchPageManager extends StatelessWidget{
+
+  final String searchKeyWords;                  
+
+  SearchPageManager({@required this.searchKeyWords});       //getting search string
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_appTitle),
+        ),
+        body: SearchPage(searchKeyWords),
+    );
+  }
+
+}
+
+class SearchPage extends StatefulWidget{
+
+  final String searchKeyWords;
+
+  SearchPage(this.searchKeyWords);                          //getting search string from the SearchPageManager
+
   @override
   State<StatefulWidget> createState() {
-    return _WallpaperManagerState();
+    return _SearchPageState();
   }
 }
 
-class _WallpaperManagerState extends State<WallpaperManager> {
+class _SearchPageState extends State<SearchPage>{
+
   String apiKey;
   static int page = 1;
+  String searchKeyWords;
 
   HashMap _wallpapers = new HashMap<String, List<String>>();
   List thumbUrls = new List();
@@ -26,17 +53,18 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     setState(() {
       apiKey = DotEnv().env['API_KEY'];
     });
-    _getWallpaper();
+   _getWallpaper();
   }
   
   @override
   void initState() {
+    searchKeyWords = widget.searchKeyWords;               //getting the search string to the State of SearchPage Widget
     super.initState();
     getApiKey();
   }
 
   void _getWallpaper() async{
-    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=featured&page=$page";
+    String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=search&term=$searchKeyWords&page=$page";
     try{
       final http.Response response = await http.get(Uri.encodeFull(url));
 
@@ -46,7 +74,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
         if(data["success"]){
           var wallpaperList = data["wallpapers"] as List;
         
-          if(page<1000){
+          if(page<100){
             page++;
           }
           else{
@@ -79,6 +107,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
 
   @override
   Widget build(BuildContext context) {
+    print(searchKeyWords);
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
