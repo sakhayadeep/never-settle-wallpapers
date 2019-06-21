@@ -34,7 +34,7 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     getApiKey();
   }
 
-  void _getWallpaper() async{
+  Future<void> _getWallpaper() async{
     String url = "https://wall.alphacoders.com/api2.0/get.php?auth=$apiKey&method=random";
     try{
       final http.Response response = await http.get(Uri.encodeFull(url));
@@ -47,15 +47,14 @@ class _WallpaperManagerState extends State<WallpaperManager> {
 
           for(int i=0; i<wallpaperList.length; i++){
             _wallpapers[wallpaperList[i]["url_thumb"].toString()] = [wallpaperList[i]["id"].toString(), wallpaperList[i]["url_image"].toString()];
-
-            setState(() {
+          }
+          setState(() {
               _wallpapers.forEach((thumbUrl,imageIdUrls){
                 if(thumbUrls.contains(thumbUrl) == false){
                   thumbUrls.add(thumbUrl);
                 }
               });
             });
-          }
         }
     } else {
       Scaffold.of(context).showSnackBar(new SnackBar(
@@ -69,16 +68,22 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     }
   }
 
+  void loadMoreWallpapers()async{
+    await _getWallpaper();
+  }
+
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-              _getWallpaper();
+              loadMoreWallpapers();
           }
         },
-        child: ListView(
-          children: <Widget>[Wallpapers(_wallpapers, thumbUrls)],
+        child: Center(
+          child: _wallpapers.length>0?ListView(
+            children: <Widget>[Wallpapers(_wallpapers, thumbUrls)],
+          ):CircularProgressIndicator(),
         ));
   }
 }

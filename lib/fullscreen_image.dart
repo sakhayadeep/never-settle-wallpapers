@@ -4,8 +4,6 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:http/http.dart' as http;
 
-const String _appTitle = "Never Settle";
-
 class FullScreenImagePage extends StatefulWidget {
   final List<String> wallpapers;
   FullScreenImagePage(this.wallpapers);
@@ -41,11 +39,13 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   }
 }
 
-void _onHomePressed() async{
+void _onHomePressed() {
   try{
     _showSnackBar("Setting Home Screen, please wait...");
-    await Wallpaper.homeScreen(imgPath);
-    _showSnackBar("Home Screen wallpaper set!");
+     Future<String> result = Wallpaper.homeScreen(imgPath);
+     result.then((homescreenResult){
+       _showSnackBar(homescreenResult);
+     });
   }catch(e){
     print(e);
   }
@@ -61,7 +61,7 @@ void _onHomePressed() async{
     return new Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-            title: Text(_appTitle),
+            title: Text("Set Wallpaper"),
           ),
       body: new SizedBox.expand(
         child: new Container(

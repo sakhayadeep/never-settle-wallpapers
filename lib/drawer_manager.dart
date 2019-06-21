@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:never_settle/search_page_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import './search_page_manager.dart';
+import './categories.dart';
 
 class DrawerManager extends StatefulWidget {
   final Function _changeThemeStatus;
@@ -26,16 +28,14 @@ class _DrawerManagerState extends State<DrawerManager> {
     super.initState();
   }
 
-  void _onSearchPressed(){
+  void _onSearchPressed() async{
     FocusScope.of(context).requestFocus(new FocusNode());
     if(_searchController.text.isNotEmpty){
-
-      String searchKeywords = Uri.encodeQueryComponent(_searchController.text);
-    
-      Navigator.push(context,
+    String searchKeywords = _searchController.text;
+      await Navigator.push(context,
       new MaterialPageRoute(
         builder: (context){
-          return SearchPageManager(searchKeyWords: searchKeywords,);
+          return SearchPageManager(searchKeyWords: searchKeywords, method: 'search',);
         }
       )
       );
@@ -43,6 +43,16 @@ class _DrawerManagerState extends State<DrawerManager> {
     }
     else
       print("empty");
+  }
+
+  void _onCategoriesPressed() async{
+    await Navigator.push(context,
+      new MaterialPageRoute(
+        builder: (context){
+          return Categories();
+        }
+      )
+      );
   }
 
   @override
@@ -95,6 +105,11 @@ class _DrawerManagerState extends State<DrawerManager> {
                 _onSearchPressed();
               },
             ),
+          ),
+          ListTile(
+            leading: CircleAvatar(child: Icon(Icons.category),),
+            title: Text("Categories"),
+            onTap: () => _onCategoriesPressed(),
           )
         ],
       ),
