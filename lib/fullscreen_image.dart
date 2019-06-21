@@ -44,7 +44,7 @@ void _onHomePressed() {
     _showSnackBar("Setting Home Screen, please wait...");
      Future<String> result = Wallpaper.homeScreen(imgPath);
      result.then((homescreenResult){
-       _showSnackBar(homescreenResult);
+       _showSnackBar("Home Screen is set successfully");
      });
   }catch(e){
     print(e);
