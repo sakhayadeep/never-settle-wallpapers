@@ -40,7 +40,7 @@ void _getCategories() async {
       final http.Response response = await http.get(Uri.encodeFull(url));
 
       var data = json.decode(response.body);
-      print(data);
+    
       if (response.statusCode == 200) {
         if(data["success"]){
           var categories = data["categories"] as List;
@@ -84,9 +84,12 @@ void _onCategoryTapped(String category) async{
           itemCount: 30,
           itemBuilder: (context, index){
             return ListTile(
-              title: Center(
-                child: Text(categoriesList[index],style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
-                ),
+              title: Card(
+                    child: Center(
+                      heightFactor: 3,
+                      child: Text(categoriesList[index],style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
+                  ),
+              ),
               onTap: ()=>_onCategoryTapped(categoriesList[index]),
             );
           },

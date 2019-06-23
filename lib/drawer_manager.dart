@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import './settings_page.dart';
 import './search_page_manager.dart';
 import './categories.dart';
 
@@ -28,11 +28,21 @@ class _DrawerManagerState extends State<DrawerManager> {
     super.initState();
   }
 
-  void _onSearchPressed() async{
+  void _onSettingsPressed(){
+    Navigator.push(context,
+      new MaterialPageRoute(
+        builder: (context){
+          return SettingsPage(changeThemeStatus: _changeThemeStatus, darkThemeEnabled: _darkThemeEnabled,);
+        }
+      )
+      );
+  }
+
+  void _onSearchPressed(){
     FocusScope.of(context).requestFocus(new FocusNode());
     if(_searchController.text.isNotEmpty){
     String searchKeywords = _searchController.text;
-      await Navigator.push(context,
+    Navigator.push(context,
       new MaterialPageRoute(
         builder: (context){
           return SearchPageManager(searchKeyWords: searchKeywords, method: 'search',);
@@ -45,8 +55,8 @@ class _DrawerManagerState extends State<DrawerManager> {
       print("empty");
   }
 
-  void _onCategoriesPressed() async{
-    await Navigator.push(context,
+  void _onCategoriesPressed(){
+    Navigator.push(context,
       new MaterialPageRoute(
         builder: (context){
           return Categories();
@@ -62,33 +72,17 @@ class _DrawerManagerState extends State<DrawerManager> {
         padding: EdgeInsets.all(0),
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.teal),
+            decoration: BoxDecoration(
+              image:DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/DrawerBackground.png")
+                ),
+              ),
             child: Center(
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
-                leading: Image.asset("assets/NeverSettle.png"),
-                trailing: InkWell(
-                          child: Text("Powered By Wallpaper Abyss"),
-                          onTap: () async {
-                            if (await canLaunch("https://wall.alphacoders.com")) {
-                              await launch("https://wall.alphacoders.com");
-                            }
-                          },
-                        ),
+                title: Image.asset("assets/NeverSettle.png"),
               ),
-            ),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              child: Icon(Icons.brightness_4),
-            ),
-            title: Text("Dark Theme"),
-            trailing: Switch(
-              value: _darkThemeEnabled,
-              onChanged: (changedTheme) {
-                _darkThemeEnabled = _darkThemeEnabled ? false : true;
-                _changeThemeStatus();
-              },
             ),
           ),
           ListTile(
@@ -101,16 +95,21 @@ class _DrawerManagerState extends State<DrawerManager> {
               ),
               enableInteractiveSelection: true,
               textInputAction: TextInputAction.search,
-              onEditingComplete: (){
-                _onSearchPressed();
-              },
+              onEditingComplete: () => _onSearchPressed(),
             ),
           ),
           ListTile(
-            leading: CircleAvatar(child: Icon(Icons.category),),
+            leading: CircleAvatar(child: Icon(Icons.wallpaper),),
             title: Text("Categories"),
             onTap: () => _onCategoriesPressed(),
-          )
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              child: Icon(Icons.settings),
+            ),
+            title: Text("Settings"),
+            onTap: () => _onSettingsPressed(),
+          ),
         ],
       ),
     );

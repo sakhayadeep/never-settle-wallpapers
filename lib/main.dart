@@ -45,9 +45,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void _changeThemeStatus() {
+  void _changeThemeStatus(bool changedTheme) {
     setState(() {
-      _darkThemeEnabled = _darkThemeEnabled ? false : true;
+      _darkThemeEnabled = changedTheme;
     });
     _setSavedThemeStatus();
   }

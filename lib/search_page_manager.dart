@@ -109,10 +109,10 @@ class _SearchPageState extends State<SearchPage>{
 
   @override
   Widget build(BuildContext context) {
-    print(searchKeyWords);
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+              print('getting more wallpapers');
               _getWallpaper();
           }
         },

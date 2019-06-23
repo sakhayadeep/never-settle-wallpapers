@@ -11,7 +11,7 @@ description: A flutter application for a new world of wallpapers.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 6.0.1+6
+version: 7.0.0+7
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -50,6 +50,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/NeverSettle.png
+    - assets/DrawerBackground.png
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

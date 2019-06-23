@@ -52,7 +52,7 @@ void _onHomePressed() {
 }
 
   final LinearGradient backGroundGradient = new LinearGradient(
-      colors: [new Color(0x30000000), new Color(0x80000000)],
+      colors: [new Color(0x32410713), new Color(0x11272774)],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight);
 

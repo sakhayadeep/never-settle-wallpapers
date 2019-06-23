@@ -42,8 +42,8 @@ class _WallpapersState extends State<Wallpapers>{
                 child: GridView.count(
                   crossAxisCount:
                       MediaQuery.of(context).orientation == Orientation.portrait
-                          ? 3
-                          : 4,
+                          ? 2
+                          : 3,
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),

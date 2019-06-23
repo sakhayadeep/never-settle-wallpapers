@@ -68,21 +68,20 @@ class _WallpaperManagerState extends State<WallpaperManager> {
     }
   }
 
-  void loadMoreWallpapers()async{
-    await _getWallpaper();
-  }
-
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-              loadMoreWallpapers();
+              _getWallpaper();
           }
         },
         child: Center(
           child: _wallpapers.length>0?ListView(
-            children: <Widget>[Wallpapers(_wallpapers, thumbUrls)],
+            children: <Widget>[
+              Wallpapers(_wallpapers, thumbUrls),
+              BottomAppBar(child: Center(child: CircularProgressIndicator(),),)
+              ],
           ):CircularProgressIndicator(),
         ));
   }
